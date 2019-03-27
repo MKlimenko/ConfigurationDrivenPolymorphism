@@ -13,9 +13,7 @@ public:
 
 private:
 	ProcessOutput Process(const ProcessInput& src) {
-		ProcessOutput dst{};
-		dst = std::accumulate(src.begin(), src.end(), ProcessOutput());
-		return dst;
+		return std::accumulate(src.begin(), src.end(), ProcessOutput());
 	}
 
 	ProcessOutput Process(ProcessInput&& src) {
@@ -25,10 +23,22 @@ private:
 	virtual std::unique_ptr<BaseType> Clone(InitializationTypes&& values) const override {
 		return std::unique_ptr<BaseType>(new Accumulator());
 	}
+	
 public:
 	virtual std::unique_ptr<BaseType> Clone() const override {
 		return std::unique_ptr<BaseType>(new Accumulator());
 	}
-	
+
+	virtual InitializationTypes ReadParameter(tinyxml2::XMLElement* root) const {
+		return InitializationTypes{};
+	}
+
 	PROCESSWRAPPER
+
+	static auto Reference(const ProcessInput& src) {
+		return std::accumulate(src.begin(), src.end(), ProcessOutput());
+	}	
+	static auto Reference(ProcessInput&& src) {
+		return Reference(src);
+	}
 };

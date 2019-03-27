@@ -18,9 +18,10 @@ private:
 	ProcessOutput Process(const ProcessInput& src) {
 		assert(src.size() == values.size());
 		ProcessOutput dst{};
-		dst.reserve(src.size());
 
-		std::transform(src.begin(), src.end(), values.begin(), std::back_inserter(dst), [this](auto&lhs, auto&rhs) {
+		dst.resize(src.size());
+
+		std::transform(std::execution::par_unseq, src.begin(), src.end(), values.begin(), dst.begin(), [](auto&lhs, auto&rhs) {
 			return lhs * rhs;
 		});
 
@@ -38,11 +39,40 @@ private:
 public:
 	ElementwiseMultiplier() = default;
 	ElementwiseMultiplier(InitInput&& vec) : values(std::move(vec)) {}
-	
+
 	virtual std::unique_ptr<BaseType> Clone(InitializationTypes&& values) const override {
 		auto parameter = std::move(std::get<InitInput>(values));
 		return std::unique_ptr<BaseType>(new ElementwiseMultiplier(std::move(parameter)));
 	}
 
+	virtual InitializationTypes ReadParameter(tinyxml2::XMLElement* root) const {
+		InitInput dst;
+		auto arr = root->FirstChildElement();
+
+		std::size_t cnt = 0;
+		for (auto el = arr->FirstChildElement(); el; el = el->NextSiblingElement())
+			++cnt;
+		dst.reserve(cnt);
+		for (auto el = arr->FirstChildElement(); el; el = el->NextSiblingElement()) 
+			dst.emplace_back(folly::to<typename InputContainer::value_type>(BaseType::ReadString(el)));
+
+		//dst.resize(10000000);
+
+		return dst;
+	}
+	
 	PROCESSWRAPPER
+
+	static auto ElementwiseMultiplierReference(const ProcessInput& src, const std::vector<typename InputContainer::value_type>& kernels) {
+		assert(src.size() == kernels.size());
+		ProcessOutput dst{};
+
+		dst.resize(src.size());
+
+		std::transform(std::execution::par_unseq, src.begin(), src.end(), kernels.begin(), dst.begin(), [](auto&lhs, auto&rhs) {
+			return lhs * rhs;
+		});
+
+		return dst;
+	}
 };

@@ -1,0 +1,26 @@
+<Configuration>
+	<Function>
+		<Name>Multiplier</Name>
+		<Parameters>
+			<Parameter>-0.001</Parameter>
+			<Parameter>8e-6</Parameter>
+		</Parameters>
+	</Function>
+	<Function>
+		<Name>ElementwiseMultiplier</Name>
+		<Parameters>
+			<Parameter>
+				<value>1</value>
+				<value>2</value>
+				<value>3</value>
+				<value>4</value>
+			</Parameter>
+		</Parameters>
+	</Function>
+	<Function>
+		<Name>Accumulator</Name>
+	</Function>
+	<Function>
+		<Name>InverseSign</Name>
+	</Function>
+</Configuration>

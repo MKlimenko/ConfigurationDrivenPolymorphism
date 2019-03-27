@@ -17,9 +17,9 @@ public:
 private:
 	ProcessOutput Process(const ProcessInput& src) {
 		ProcessOutput dst{};
-		dst.reserve(src.size());
+		dst.resize(src.size());
 
-		std::transform(src.begin(), src.end(), std::back_inserter(dst), [this](auto&lhs) {
+		std::transform(std::execution::par_unseq, src.begin(), src.end(), dst.begin(), [this](auto&lhs) {
 			return std::get<0>(value) + lhs * std::get<1>(value);
 		});
 
@@ -43,5 +43,29 @@ public:
 		return std::unique_ptr<BaseType>(new Multiplier(std::move(parameter)));
 	}
 
+	virtual InitializationTypes ReadParameter(tinyxml2::XMLElement* root) const {
+		InitInput dst{};
+		auto& first = std::get<0>(dst);
+		auto& second = std::get<1>(dst);
+
+		auto ptr = root->FirstChildElement();
+		first = folly::to<typename InputContainer::value_type>(BaseType::ReadString(ptr));
+		ptr = ptr->NextSiblingElement();
+		second = folly::to<typename InputContainer::value_type>(BaseType::ReadString(ptr));
+
+		return dst;
+	}
+
 	PROCESSWRAPPER
+
+	static auto MultiplierReference(const ProcessInput& src, const std::tuple<typename InputContainer::value_type, typename InputContainer::value_type>& arguments) {
+		ProcessOutput dst{};
+		dst.resize(src.size());
+
+		std::transform(std::execution::par_unseq, src.begin(), src.end(), dst.begin(), [&arguments](auto&lhs) {
+			return std::get<0>(arguments) + lhs * std::get<1>(arguments);
+		});
+
+		return dst;
+	}
 };
