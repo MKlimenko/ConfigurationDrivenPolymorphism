@@ -61,7 +61,7 @@ public:
 		return dst;
 	}
 	
-	PROCESSWRAPPER
+	CALLWRAPPER
 
 	static auto ElementwiseMultiplierReference(const ProcessInput& src, const std::vector<typename InputContainer::value_type>& kernels) {
 		assert(src.size() == kernels.size());

@@ -77,22 +77,20 @@ inline namespace detail {
 	template <typename T>
 	constexpr bool is_container_v = is_container<T>::value;
 
-	constexpr bool keep_previous = true;
-
-	#define PROCESSWRAPPER \
-	virtual InputOutputTypes Process(const InputOutputTypes& src) override { \
-		auto input = BaseType:: template Get<ProcessInput>(src); \
+	#define CALLWRAPPER \
+	virtual InputOutputTypes operator()(const InputOutputTypes& src) override { \
+		auto input = std::get<ProcessInput>(src); \
 		return Process(input); \
 	} \
-	virtual InputOutputTypes Process(InputOutputTypes&& src) override { \
+	virtual InputOutputTypes operator()(InputOutputTypes&& src) override { \
 		if constexpr (keep_previous) { \
-			auto laundered_src = BaseType:: template Get<ProcessInput>(std::move(src)); \
+			auto laundered_src = std::get<ProcessInput>(std::move(src)); \
 			auto dst = Process(laundered_src); \
 			src = std::move(laundered_src); \
 			return dst; \
 		} \
 		else \
-			return Process(BaseType:: template Get<ProcessInput>(std::move(src))); \
+			return Process(std::get<ProcessInput>(std::move(src))); \
 	}
 }
 
@@ -132,20 +130,12 @@ public:
 	>;
 
 	static_assert(is_container_v<InputContainer>, "Expected container as a template parameter");
-	virtual InputOutputTypes Process(const InputOutputTypes& src) = 0;
-	virtual InputOutputTypes Process(InputOutputTypes&& src) = 0;
+	//virtual InputOutputTypes Process(const InputOutputTypes& src) = 0;
+	//virtual InputOutputTypes Process(InputOutputTypes&& src) = 0;
+	virtual InputOutputTypes operator()(const InputOutputTypes& src) = 0;
+	virtual InputOutputTypes operator()(InputOutputTypes&& src) = 0;
 	virtual std::unique_ptr<CommonProcessing> Clone() const = 0;
 	virtual std::unique_ptr<CommonProcessing> Clone(InitializationTypes&& values) const = 0;
 	virtual InitializationTypes ReadParameter(tinyxml2::XMLElement* root) const = 0;
 	virtual ~CommonProcessing() = default;
-
-	template <typename T>
-	static auto Get(const InputOutputTypes& src) {
-		return std::get<T>(src);
-	}
-
-	template <typename T>
-	static auto Get(InputOutputTypes&& src) {
-		return std::get<T>(std::move(src));
-	}
 };

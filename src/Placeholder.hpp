@@ -33,7 +33,7 @@ public:
 		return InitializationTypes{};
 	}
 
-	PROCESSWRAPPER
+	CALLWRAPPER
 
 	static auto PlaceholderReference(const ProcessInput& src) {
 		return src;

@@ -56,7 +56,7 @@ public:
 		return dst;
 	}
 
-	PROCESSWRAPPER
+	CALLWRAPPER
 
 	static auto MultiplierReference(const ProcessInput& src, const std::tuple<typename InputContainer::value_type, typename InputContainer::value_type>& arguments) {
 		ProcessOutput dst{};

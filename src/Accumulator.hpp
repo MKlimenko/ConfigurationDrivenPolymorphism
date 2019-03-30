@@ -33,7 +33,7 @@ public:
 		return InitializationTypes{};
 	}
 
-	PROCESSWRAPPER
+	CALLWRAPPER
 
 	static auto Reference(const ProcessInput& src) {
 		return std::accumulate(src.begin(), src.end(), ProcessOutput());
