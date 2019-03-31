@@ -1,0 +1,3 @@
+# Configuration-driven Polymorphism example
+
+CDP allows you to wrap your API in a way to allow other programmers to rearrange the functions in the variety of ways. You may give neural network primitives to the data scientists to let them test their new approaches and hypothesis. You may decide what's better: distortion into the compressor or vice versa. Check out the [blog post](https://mklimenko.github.io/english/2019/03/31/configuration-driven-polymorphism/)
