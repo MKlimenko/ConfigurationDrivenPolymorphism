@@ -29,7 +29,7 @@ public:
 		return std::unique_ptr<BaseType>(new Placeholder());
 	}
 
-	virtual InitializationTypes ReadParameter(tinyxml2::XMLElement* root) const {
+	virtual InitializationTypes ReadParameters(tinyxml2::XMLElement* root) const {
 		return InitializationTypes{};
 	}
 

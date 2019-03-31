@@ -45,7 +45,7 @@ public:
 		return std::unique_ptr<BaseType>(new ElementwiseMultiplier(std::move(parameter)));
 	}
 
-	virtual InitializationTypes ReadParameter(tinyxml2::XMLElement* root) const {
+	virtual InitializationTypes ReadParameters(tinyxml2::XMLElement* root) const {
 		InitInput dst;
 		auto arr = root->FirstChildElement();
 

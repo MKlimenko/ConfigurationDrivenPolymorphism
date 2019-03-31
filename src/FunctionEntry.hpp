@@ -51,7 +51,7 @@ public:
 			std::string name = child_function->FirstChildElement("Name")->GetText();
 			auto parameters = child_function->FirstChildElement("Parameters");
 			if (parameters) 
-				dst.emplace_back(std::move(name), mapa.at(name)->ReadParameter(parameters));
+				dst.emplace_back(std::move(name), mapa.at(name)->ReadParameters(parameters));
 			else 
 				dst.emplace_back(std::move(name));
 		}

@@ -36,10 +36,9 @@ int main() {
 	
 #endif
 	try {
-		ChainProcessing<std::vector<double>, true> c("..\\..\\..\\xml\\example.xml");
+		ChainProcessing c("..\\..\\..\\xml\\example.xml");
 		std::vector<double> data_vec{ 0.1, -0.1, 0.2, -0.2 };
 		auto dst = c.Process(std::move(data_vec));
-		auto a = 5;
 	}
 	catch (std::exception&e) {
 		auto a = e;

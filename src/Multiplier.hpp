@@ -43,7 +43,7 @@ public:
 		return std::unique_ptr<BaseType>(new Multiplier(std::move(parameter)));
 	}
 
-	virtual InitializationTypes ReadParameter(tinyxml2::XMLElement* root) const {
+	virtual InitializationTypes ReadParameters(tinyxml2::XMLElement* root) const {
 		InitInput dst{};
 		auto& first = std::get<0>(dst);
 		auto& second = std::get<1>(dst);

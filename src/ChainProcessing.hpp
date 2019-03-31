@@ -7,8 +7,6 @@
 
 #include "FunctionEntry.hpp"
 
-#include <filesystem>
-
 #define NAMEOF(x) #x
 
 template <typename InputContainer = std::vector<double>, bool keep_previous = false>
@@ -36,6 +34,7 @@ private:
 		std::vector<FunctionEntryTemplate>&& read_functions,
 		const std::unordered_map<std::string, std::unique_ptr<BaseProcessing>>& function_map
 	) {
+		processing_vector.clear();
 		for (auto&read_function : read_functions)
 			if (!read_function)
 				processing_vector.emplace_back(function_map.at(read_function)->Clone());
